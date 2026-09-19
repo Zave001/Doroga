@@ -84,5 +84,5 @@ export const CATEGORIES: CategoryDef[] = [
 
 export const CATEGORY_LABELS: Record<string, string> = {
   ...Object.fromEntries(CATEGORIES.map((c) => [c.key, c.title])),
-  unknown: 'Ссылка из статьи',
+  unknown: 'Другое',
 };

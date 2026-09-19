@@ -5,7 +5,8 @@ import { MapView } from './components/MapView';
 import { Sidebar } from './components/Sidebar';
 import { CATEGORIES } from './data/categories';
 import { useCategoryStreets } from './hooks/useCategoryStreets';
-import { loadOsmIndex, matchOsm } from './lib/osmMatch';
+import { capitalizeFirst, normalizeName } from './lib/normalize';
+import { loadOsmIndex, matchOsmKey } from './lib/osmMatch';
 import type { OsmStreetEntry, StreetItem } from './types';
 
 function App() {
@@ -19,18 +20,24 @@ function App() {
       .catch(() => setOsmIndex({}));
   }, []);
 
-  const selectedEntry = useMemo(() => {
+  const selectedKey = useMemo(() => {
     if (!selected || !osmIndex) return null;
-    return matchOsm(osmIndex, selected.name);
+    return matchOsmKey(osmIndex, selected.name);
   }, [selected, osmIndex]);
 
-  // Ссылка внутри статьи может вести на объект, категория которого ещё не
-  // раскрыта в сайдбаре — тогда создаём временный StreetItem "на лету".
-  const handleNavigate = (name: string) => {
+  const selectedEntry = selectedKey && osmIndex ? (osmIndex[selectedKey] ?? null) : null;
+
+  // Имя может прийти со страницы статьи (уже в стиле towiki, "Проспект Ленина")
+  // или прямо с карты (в стиле OSM, "проспект Ленина") — сравниваем без учёта
+  // регистра/оформления и, если объект уже загружен в сайдбаре, переиспользуем
+  // его карточку вместо временной.
+  const selectByName = (rawName: string) => {
+    const displayName = capitalizeFirst(rawName);
+    const targetKey = normalizeName(displayName);
     const known = Object.values(itemsByCategory)
       .flat()
-      .find((candidate) => candidate.name === name);
-    setSelected(known ?? { name, category: 'unknown', hasWikiPage: true });
+      .find((candidate) => normalizeName(candidate.name) === targetKey);
+    setSelected(known ?? { name: displayName, category: 'unknown', hasWikiPage: true });
   };
 
   return (
@@ -45,13 +52,13 @@ function App() {
         selected={selected}
       />
       <main className="map-area">
-        <MapView entry={selectedEntry} />
+        <MapView osmIndex={osmIndex} selectedKey={selectedKey} onSelectStreet={selectByName} />
       </main>
       {selected && (
         <InfoPanel
           street={selected}
           osmEntry={selectedEntry}
-          onNavigate={handleNavigate}
+          onNavigate={selectByName}
           onClose={() => setSelected(null)}
         />
       )}

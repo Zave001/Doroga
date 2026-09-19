@@ -13,10 +13,14 @@ export function loadOsmIndex(): Promise<Record<string, OsmStreetEntry>> {
   return indexPromise;
 }
 
-export function matchOsm(index: Record<string, OsmStreetEntry>, name: string): OsmStreetEntry | null {
+export function matchOsmKey(index: Record<string, OsmStreetEntry>, name: string): string | null {
   for (const key of candidateKeys(name)) {
-    const found = index[key];
-    if (found) return found;
+    if (index[key]) return key;
   }
   return null;
+}
+
+export function matchOsm(index: Record<string, OsmStreetEntry>, name: string): OsmStreetEntry | null {
+  const key = matchOsmKey(index, name);
+  return key ? index[key] : null;
 }

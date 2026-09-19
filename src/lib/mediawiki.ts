@@ -73,6 +73,24 @@ function absolutizeWikiUrls(html: string): string {
     const href = el.getAttribute('href');
     if (href?.startsWith('/')) el.setAttribute('href', `https://towiki.ru${href}`);
   }
+  // MediaWiki-миниатюры добавляют srcset для retina-экранов ("... 1.5x, ... 2x"):
+  // на обычном DPI браузер берёт src и всё грузится, а на Retina — кандидата из
+  // srcset, который без этой замены остаётся относительным и ломается.
+  for (const el of doc.querySelectorAll('[srcset]')) {
+    const srcset = el.getAttribute('srcset');
+    if (!srcset) continue;
+    const rewritten = srcset
+      .split(',')
+      .map((candidate) => {
+        const trimmed = candidate.trim();
+        const spaceIdx = trimmed.indexOf(' ');
+        const url = spaceIdx === -1 ? trimmed : trimmed.slice(0, spaceIdx);
+        const descriptor = spaceIdx === -1 ? '' : trimmed.slice(spaceIdx);
+        return url.startsWith('/') ? `https://towiki.ru${url}${descriptor}` : trimmed;
+      })
+      .join(', ');
+    el.setAttribute('srcset', rewritten);
+  }
   return doc.body.innerHTML;
 }
 
