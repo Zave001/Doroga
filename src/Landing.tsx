@@ -30,11 +30,10 @@ function useRevealOnScroll() {
   }, []);
 }
 
-function SlideTag({ n, title, seconds }: { n: number; title: string; seconds?: number }) {
+function SlideTag({ n, title }: { n: number; title: string }) {
   return (
     <p className="eyebrow">
       Слайд {String(n).padStart(2, '0')}/10 · {title}
-      {seconds ? ` · ~${seconds} сек` : ''}
     </p>
   );
 }
@@ -115,7 +114,7 @@ export function Landing() {
 
         {/* Слайд 2 — Проблема */}
         <section className="problem reveal" id="problem">
-          <SlideTag n={2} title="Проблема" seconds={30} />
+          <SlideTag n={2} title="Проблема" />
           <h2>Технология шире, чем ниша, в которую мы её загнали</h2>
           <ul className="problem__list">
             <li>Организаторы мероприятий делают карты вручную — дорого и долго.</li>
@@ -137,7 +136,7 @@ export function Landing() {
 
         {/* Слайд 3 — Решение: 4 продукта */}
         <section className="divergence reveal" id="solution">
-          <SlideTag n={3} title="Решение — 4 продукта" seconds={30} />
+          <SlideTag n={3} title="Решение — 4 продукта" />
           <h2>Один движок — четыре разных бизнеса</h2>
           <div className="fork">
             <div className="fork__trunk">
@@ -166,7 +165,7 @@ export function Landing() {
 
         {/* Слайд 4 — Продукт 4: уже готовый MVP */}
         <section className="concept concept--live reveal" id="product4">
-          <SlideTag n={4} title="Продукт 4 — уже готовый MVP" seconds={30} />
+          <SlideTag n={4} title="Продукт 4 — уже готовый MVP" />
           <h2>«Узнаю дорогу.рф»</h2>
           <p className="concept__thesis">
             Карта Томска на OpenStreetMap + статьи towiki.ru. Клик по улице на карте или в
@@ -197,7 +196,7 @@ export function Landing() {
 
         {/* Слайд 5 — Рынок и цены */}
         <section className="market-slide reveal" id="market">
-          <SlideTag n={5} title="Рынок и цены" seconds={35} />
+          <SlideTag n={5} title="Рынок и цены" />
           <h2>Где деньги</h2>
           <div className="compare__table">
             <div className="compare__row compare__row--head">
@@ -222,7 +221,7 @@ export function Landing() {
 
         {/* Слайд 6 — Как проверяем спрос */}
         <section className="validation reveal" id="validation">
-          <SlideTag n={6} title="Как проверяем спрос" seconds={30} />
+          <SlideTag n={6} title="Как проверяем спрос" />
           <h2>Деньгами, а не мнениями</h2>
           <div className="validation__flow">
             <span>CustDev по реальному поведению</span>
@@ -252,7 +251,7 @@ export function Landing() {
 
         {/* Слайд 7 — Результаты */}
         <section className="results reveal" id="results">
-          <SlideTag n={7} title="Результаты" seconds={30} />
+          <SlideTag n={7} title="Результаты" />
           <h2>Что уже сделано</h2>
           <ul className="results__list">
             <li>Работающий прототип «Узнаю дорогу.рф»: интеграция с OpenStreetMap + towiki.ru.</li>
@@ -263,7 +262,7 @@ export function Landing() {
 
         {/* Слайд 8 — Каналы выхода на рынок */}
         <section className="channels channels--top reveal" id="channels">
-          <SlideTag n={8} title="Каналы выхода на рынок" seconds={30} />
+          <SlideTag n={8} title="Каналы выхода на рынок" />
           <h2>Как доберёмся до клиентов</h2>
           <div className="channels__grid">
             <div>
