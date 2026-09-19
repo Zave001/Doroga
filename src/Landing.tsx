@@ -162,7 +162,7 @@ export function Landing() {
           <h2>Один движок — четыре разных бизнеса</h2>
           <div className="fork">
             <div className="fork__trunk">
-              <span>OSM + towiki движок</span>
+              <span>OSM движок + типография</span>
             </div>
             <div className="fork__branches">
               <div className="fork__branch">
