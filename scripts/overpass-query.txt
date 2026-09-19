@@ -1,0 +1,7 @@
+[out:json][timeout:120];
+(
+  way["highway"]["name"](56.35,84.75,56.60,85.20);
+  node["place"~"^(neighbourhood|suburb|village|hamlet|quarter|isolated_dwelling)$"]["name"](56.35,84.75,56.60,85.20);
+  relation["place"~"^(neighbourhood|suburb|village|hamlet|quarter|isolated_dwelling)$"]["name"](56.35,84.75,56.60,85.20);
+);
+out geom;

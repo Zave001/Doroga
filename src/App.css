@@ -1,0 +1,255 @@
+.app {
+  display: flex;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 320px;
+  min-width: 260px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar__header {
+  padding: 16px 16px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar__header h1 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+.sidebar__header p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--text);
+  opacity: 0.8;
+}
+
+.sidebar__search {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 13px;
+}
+
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.category__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-h);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.category__header:hover {
+  background: var(--accent-bg);
+}
+
+.count {
+  font-size: 12px;
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.street-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 8px;
+  background: var(--bg);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.street-item {
+  width: 100%;
+  text-align: left;
+  padding: 6px 24px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.street-item:hover {
+  color: var(--accent);
+}
+
+.street-item.is-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.street-item.is-empty {
+  opacity: 0.55;
+}
+
+.street-list__empty,
+.street-list__error {
+  padding: 6px 24px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* Map */
+.map-area {
+  flex: 1;
+  position: relative;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+  background: #dfe3e6;
+}
+
+/* Info panel */
+.info-panel {
+  width: 380px;
+  min-width: 300px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.info-panel__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.info-panel h2 {
+  margin: 0 32px 8px 0;
+  font-size: 20px;
+}
+
+.info-panel__badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.badge--ok {
+  color: #2a9d5c;
+  border-color: #2a9d5c;
+  background: rgba(42, 157, 92, 0.1);
+}
+
+.badge--warn {
+  color: #b8860b;
+  border-color: #b8860b;
+  background: rgba(184, 134, 11, 0.12);
+}
+
+.info-panel__source {
+  display: inline-block;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.info-panel__empty,
+.info-panel__status,
+.info-panel__error {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.info-panel__error {
+  color: #c1272d;
+}
+
+.info-panel__content {
+  font-size: 13px;
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.info-panel__content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.info-panel__content table {
+  max-width: 100%;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .app {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+
+  .sidebar,
+  .info-panel {
+    width: 100%;
+  }
+
+  .map-area {
+    height: 60vh;
+  }
+}
