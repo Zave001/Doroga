@@ -30,40 +30,52 @@ function useRevealOnScroll() {
   }, []);
 }
 
-interface MarketBarProps {
-  tam: string;
-  sam: string;
-  som: string;
-  samPct: number;
-  somPct: number;
-  note?: string;
-}
-
-function MarketBar({ tam, sam, som, samPct, somPct, note }: MarketBarProps) {
+function SlideTag({ n, title, seconds }: { n: number; title: string; seconds?: number }) {
   return (
-    <div className="market">
-      <div className="market__bar">
-        <div className="market__seg market__seg--sam" style={{ width: `${samPct}%` }} />
-        <div className="market__seg market__seg--som" style={{ width: `${somPct}%` }} />
-      </div>
-      <dl className="market__figures">
-        <div>
-          <dt>TAM</dt>
-          <dd>{tam}</dd>
-        </div>
-        <div>
-          <dt>SAM</dt>
-          <dd>{sam}</dd>
-        </div>
-        <div>
-          <dt>SOM</dt>
-          <dd>{som}</dd>
-        </div>
-      </dl>
-      {note && <p className="market__note">{note}</p>}
-    </div>
+    <p className="eyebrow">
+      Слайд {String(n).padStart(2, '0')}/10 · {title}
+      {seconds ? ` · ~${seconds} сек` : ''}
+    </p>
   );
 }
+
+const PRICING_ROWS = [
+  {
+    name: 'Персональная карта',
+    som: '75 млн ₽',
+    price: '1 990–8 000 ₽ (с рамкой)',
+    margin: '3 500–7 500 ₽ (премиум)',
+  },
+  {
+    name: 'Event Maps',
+    som: '5 млн ₽',
+    price: '1 500–2 500 ₽',
+    margin: '1 000–2 000 ₽',
+  },
+  {
+    name: 'Реклама на местности',
+    som: '110 млн ₽/год',
+    price: '5 000–15 000 ₽',
+    margin: '4 500–14 500 ₽',
+  },
+  {
+    name: '«Узнаю дорогу.рф»',
+    som: 'оценивается по пилотам',
+    price: 'лицензии / партнёрства',
+    margin: '—',
+  },
+];
+
+const TEAM = [
+  'Грищенко Сергей',
+  'Карев Степан',
+  'Кузнецов Алексей',
+  'Маслеников Юрий',
+  'Суханов Артём',
+  'Тарасенко Галина',
+  'Абдурахипов Роман',
+  'Васильев Кирилл',
+];
 
 export function Landing() {
   useRevealOnScroll();
@@ -80,329 +92,218 @@ export function Landing() {
       </header>
 
       <main>
+        {/* Слайд 1 — Титульный */}
         <section className="hero">
-          <p className="eyebrow">Кейс «Знаю дорогу» · сайд-проект</p>
+          <p className="eyebrow">Команда «Колобок» · слайд 01/10</p>
           <h1>
-            Одна карта Томска.
-            <br />
-            Четыре продукта.
+            «Знаю дорогу» — от карты для детей
+            <br />к 4 продуктовым направлениям
           </h1>
           <p className="hero__lede">
-            Мы взяли работающий движок «узнаюдорогу.рф» — актуальные данные OpenStreetMap,
-            размеченные историей улиц из towiki.ru — и проверили, куда он может вырасти
-            как продукт. Получилось четыре разных гипотезы для четырёх разных рынков.
+            Кейс №3: поиск новых ниш и проверка спроса для сервиса персонализированных карт.
+            Один работающий движок — четыре разных рынка.
           </p>
           <div className="hero__actions">
             <a className="btn btn--primary" href={TOOL_URL}>
-              Посмотреть живой инструмент
+              Посмотреть живой MVP
             </a>
-            <a className="btn btn--ghost" href="#context">
-              Как мы к этому пришли ↓
+            <a className="btn btn--ghost" href="#problem">
+              Питч ↓
             </a>
           </div>
         </section>
 
-        <section className="context reveal" id="context">
-          <div className="context__grid">
-            <div>
-              <p className="eyebrow">Цель кейса</p>
-              <p>Найти жизнеспособные продуктовые гипотезы.</p>
-            </div>
-            <div>
-              <p className="eyebrow">Задача команды</p>
-              <p>Сгенерировать новые концепции продуктов.</p>
-            </div>
-            <div>
-              <p className="eyebrow">Решение</p>
-              <p>Разработаны 4 концепции продуктов на общей технологической базе.</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="divergence reveal">
-          <p className="eyebrow">Точка расхождения</p>
-          <h2>Один движок — четыре разных бизнеса</h2>
-          <p className="section__lede">
-            У всех четырёх концепций общий фундамент: связка OSM-геоданных и
-            краеведческого контента. Дальше пути расходятся — у каждой концепции
-            своя проблема, своя аудитория и своя модель денег.
+        {/* Слайд 2 — Проблема */}
+        <section className="problem reveal" id="problem">
+          <SlideTag n={2} title="Проблема" seconds={30} />
+          <h2>Технология шире, чем ниша, в которую мы её загнали</h2>
+          <ul className="problem__list">
+            <li>Организаторы мероприятий делают карты вручную — дорого и долго.</li>
+            <li>Локальный бизнес физически рядом с клиентом, но невидим для него.</li>
+            <li>
+              Люди хотят сохранить личную историю (отношения, путешествие, детство) в
+              физическом виде — удобного формата нет.
+            </li>
+            <li>
+              Краеведческий контент города разрознён: тексты про историю улиц существуют
+              отдельно от карты.
+            </li>
+          </ul>
+          <p className="callout-quote">
+            Узкое позиционирование «карта для детей» держало нас в одной нише — при том
+            что технология закрывает четыре разных рынка.
           </p>
+        </section>
+
+        {/* Слайд 3 — Решение: 4 продукта */}
+        <section className="divergence reveal" id="solution">
+          <SlideTag n={3} title="Решение — 4 продукта" seconds={30} />
+          <h2>Один движок — четыре разных бизнеса</h2>
           <div className="fork">
             <div className="fork__trunk">
               <span>OSM + towiki движок</span>
             </div>
             <div className="fork__branches">
-              <div className="fork__branch">Подарки</div>
-              <div className="fork__branch">Ивенты</div>
-              <div className="fork__branch">Реклама на местности</div>
-              <div className="fork__branch fork__branch--live">towiki-интеграция</div>
+              <div className="fork__branch">
+                <strong>Event Maps</strong>
+                <span>Конструктор карт для мероприятий и спорта</span>
+              </div>
+              <div className="fork__branch">
+                <strong>Реклама на местности</strong>
+                <span>Физический рекламный объект: сити-формат, карта-навигатор</span>
+              </div>
+              <div className="fork__branch">
+                <strong>Персональная карта</strong>
+                <span>История, путешествие, подарок — премиум в раме</span>
+              </div>
+              <div className="fork__branch fork__branch--live">
+                <strong>«Узнаю дорогу.рф»</strong>
+                <span>Веб-карта города + краеведческий контент — уже работающий MVP</span>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="concept reveal" id="concept-a">
-          <div className="concept__head">
-            <p className="eyebrow">Продукт 1</p>
-            <h2>«Карта нашей истории»</h2>
-            <p className="concept__tag">Персональные карты как подарок</p>
-          </div>
+        {/* Слайд 4 — Продукт 4: уже готовый MVP */}
+        <section className="concept concept--live reveal" id="product4">
+          <SlideTag n={4} title="Продукт 4 — уже готовый MVP" seconds={30} />
+          <h2>«Узнаю дорогу.рф»</h2>
           <p className="concept__thesis">
-            Продаём не «карту», а эмоцию, память или полезный персональный объект.
+            Карта Томска на OpenStreetMap + статьи towiki.ru. Клик по улице на карте или в
+            списке → приближение и карточка с историей → ссылки внутри статьи ведут дальше
+            по карте.
           </p>
-          <div className="concept__body">
+          <div className="concept__body concept__body--two">
             <div className="concept__col">
-              <h3>Проблема</h3>
+              <h3>Технически</h3>
               <p>
-                Типовые сувениры не передают личную историю. На рынке подарков не хватает
-                вещи, которая была бы по-настоящему «про нас двоих» или «про нашу семью».
+                Полностью статичный сайт, бесплатный хостинг на GitHub Pages, без сервера.
+                Модель легко тиражируется на другие города, где есть похожие краеведческие
+                вики-проекты.
               </p>
             </div>
             <div className="concept__col">
-              <h3>Решение</h3>
+              <h3>Монетизация</h3>
               <p>
-                Карта на основе реальных OSM-данных с отмеченными личными точками —
-                первое свидание, свадебный маршрут, путешествие, семейная хроника.
-                Печатается как постер или альбом.
-              </p>
-            </div>
-            <div className="concept__col">
-              <h3>Целевая аудитория</h3>
-              <p>
-                Пары, семьи, путешественники; покупатели подарков к годовщинам,
-                свадьбам, дням рождения.
+                Лицензии школам и вузам — краеведение на уроках. Партнёрства с рекламными
+                агентствами — размещение локального бизнеса на карте.
               </p>
             </div>
           </div>
-          <div className="niches">
-            <h3>Три основные ниши</h3>
-            <div className="niches__grid">
-              <div>
-                <p className="channels__label">Подарки и памятные события</p>
-                <p>«Наша история на карте».</p>
-              </div>
-              <div>
-                <p className="channels__label">Путешествия</p>
-                <p>Персональная карта поездки или маршрута.</p>
-              </div>
-              <div>
-                <p className="channels__label">Корпоративные подарки</p>
-                <p>Офисы, регионы присутствия, маршруты и достижения компании.</p>
-              </div>
-            </div>
-            <p className="niches__note">
-              Отдельно можно тестировать свадьбы, выпускные, переезды и интерьерные карты.
-            </p>
-          </div>
-          <MarketBar
-            tam="≈ 3 млрд ₽"
-            sam="≈ 1,5 млрд ₽"
-            som="≈ 75 млн ₽"
-            samPct={50}
-            somPct={2.5}
-            note="SAM — 50% рынка, цифрово доступные клиенты в целевых городах. SOM — 5% SAM за 3–5 лет."
-          />
-        </section>
-
-        <section className="concept reveal" id="concept-b">
-          <div className="concept__head">
-            <p className="eyebrow">Продукт 2</p>
-            <h2>Event Maps</h2>
-            <p className="concept__tag">Карты для страйкбола, квестов и мероприятий</p>
-          </div>
-          <div className="concept__body">
-            <div className="concept__col">
-              <h3>Концепция</h3>
-              <p>
-                Персональная карта события под конкретное мероприятие — не просто схема
-                территории, а элемент игры: маршрут, точки заданий, зоны команд,
-                чекпоинты, тайники.
-              </p>
-            </div>
-            <div className="concept__col">
-              <h3>Проблема</h3>
-              <p>
-                Карты мероприятий сейчас делают вручную: нужен дизайнер, они однотипны,
-                сложно адаптируются под новую локацию, материалы готовятся заново каждый
-                раз. Организатору нужно одновременно дать понятную навигацию и сделать
-                карту частью впечатления от события.
-              </p>
-            </div>
-            <div className="concept__col">
-              <h3>Решение</h3>
-              <p>
-                Конструктор event-карт на базе технологии «Знаю дорогу». Организатор даёт
-                локацию, точки, маршрут, задания, логотип и стиль — получает готовую
-                карту.
-              </p>
-            </div>
-          </div>
-          <div className="channels">
-            <h3>Каналы продвижения</h3>
-            <div className="channels__grid">
-              <div>
-                <p className="channels__label">B2B — прямые продажи</p>
-                <p>VK и Telegram, сайты event-компаний, каталоги мероприятий, сообщества страйкбола.</p>
-              </div>
-              <div>
-                <p className="channels__label">Партнёрства</p>
-                <p>Event-агентства, владельцы полигонов, квест-компании, организаторы фестивалей.</p>
-              </div>
-              <div>
-                <p className="channels__label">Контент</p>
-                <p>Социальные сети и инфлюенс-маркетинг.</p>
-              </div>
-            </div>
-          </div>
-          <MarketBar
-            tam="≈ 1 млрд ₽"
-            sam="≈ 300 млн ₽"
-            som="≈ 5 млн ₽/год"
-            samPct={30}
-            somPct={0.5}
-            note="При чеке 5 тыс. ₽ — около 1 000 заказов в год."
-          />
-        </section>
-
-        <section className="concept reveal" id="concept-c">
-          <div className="concept__head">
-            <p className="eyebrow">Продукт 3</p>
-            <h2>Реклама на местности</h2>
-            <p className="concept__tag">Из карты — в локальный рекламный носитель</p>
-          </div>
-          <div className="concept__body">
-            <div className="concept__col">
-              <h3>Концепция</h3>
-              <p>
-                Технология превращается из карты в локальный рекламный носитель. Человек
-                получает полезную информацию, а бизнес рядом — рекламный контакт.
-              </p>
-              <ul className="callouts">
-                <li>Кофе — 5 минут пешком →</li>
-                <li>Бургерная — 8 минут →</li>
-                <li>Аптека — 3 минуты →</li>
-                <li>Пекарня — 4 минуты →</li>
-              </ul>
-            </div>
-            <div className="concept__col">
-              <h3>Проблема бизнеса</h3>
-              <p>
-                Локальному бизнесу сложно конкурировать за внимание человека, который уже
-                находится рядом. Кофейня может быть в 200 метрах от клиента — но клиент
-                её не видит, не знает о ней и не понимает, куда идти.
-              </p>
-              <p className="callout-quote">
-                Бизнес физически рядом, но не существует в поле внимания клиента.
-              </p>
-            </div>
-            <div className="concept__col">
-              <h3>Целевая аудитория</h3>
-              <p>Малый локальный бизнес: парикмахерские, кофейни, пекарни, магазины у дома.</p>
-              <p className="pricing-tag">Бумажная карта — 1 990 ₽ за заказ</p>
-            </div>
-          </div>
-          <div className="channels">
-            <h3>Каналы продвижения</h3>
-            <div className="channels__grid">
-              <div>
-                <p className="channels__label">Прямые продажи бизнесу</p>
-                <p>
-                  «Мы размещаем вас на карте, которую ежедневно используют люди в радиусе
-                  X км».
-                </p>
-              </div>
-              <div>
-                <p className="channels__label">Партнёрства</p>
-                <p>ТЦ, БЦ, отели, ЖК, коворкинги.</p>
-              </div>
-            </div>
-          </div>
-          <MarketBar
-            tam="≈ 5,5 млрд ₽"
-            sam="≈ 2,2 млрд ₽"
-            som="≈ 110 млн ₽/год"
-            samPct={40}
-            somPct={2}
-          />
-        </section>
-
-        <section className="concept concept--live reveal" id="concept-d">
-          <div className="concept__head">
-            <p className="eyebrow">Продукт 4</p>
-            <h2>Интеграция с towiki</h2>
-            <p className="concept__tag">Монетизация через рекламные агентства — уже работает</p>
-          </div>
-          <div className="concept__body">
-            <div className="concept__col">
-              <h3>Проблема</h3>
-              <p>
-                Краеведческий контент towiki не монетизирован и почти не имеет
-                дистрибуции — он спрятан в отдельной вики, хотя карта — самый естественный
-                интерфейс для такого контента. Рекламным агентствам негде размещать
-                контекстную локальную рекламу.
-              </p>
-            </div>
-            <div className="concept__col">
-              <h3>Решение</h3>
-              <p>
-                Слой сопоставления геоданных OSM с краеведческой вики — то, что уже
-                реализовано на узнаюдорогу.рф: интерактивная карта с историей каждой
-                улицы и местом под контекстную рекламу агентств.
-              </p>
-            </div>
-            <div className="concept__col">
-              <h3>Статус</h3>
-              <p>
-                В отличие от остальных трёх — это не гипотеза, а готовый работающий
-                прототип. Рынок ещё в оценке, но продукт уже можно открыть и потрогать.
-              </p>
-              <a className="btn btn--primary btn--small" href={TOOL_URL}>
-                Открыть узнаюдорогу.рф →
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section className="compare reveal">
-          <p className="eyebrow">Сравнение</p>
-          <h2>Где деньги, а где — доказанный продукт</h2>
-          <div className="compare__table">
-            <div className="compare__row compare__row--head">
-              <span>Продукт</span>
-              <span>TAM</span>
-              <span>SAM</span>
-              <span>SOM</span>
-            </div>
-            <div className="compare__row">
-              <span>Карта нашей истории</span>
-              <span>3 млрд ₽</span>
-              <span>1,5 млрд ₽</span>
-              <span>75 млн ₽</span>
-            </div>
-            <div className="compare__row">
-              <span>Event Maps</span>
-              <span>1 млрд ₽</span>
-              <span>300 млн ₽</span>
-              <span>5 млн ₽/год</span>
-            </div>
-            <div className="compare__row">
-              <span>Реклама на местности</span>
-              <span>5,5 млрд ₽</span>
-              <span>2,2 млрд ₽</span>
-              <span>110 млн ₽/год</span>
-            </div>
-            <div className="compare__row compare__row--live">
-              <span>Интеграция с towiki</span>
-              <span className="compare__live-badge">✓ Готовый продукт — рынок в оценке</span>
-            </div>
-          </div>
-        </section>
-
-        <section className="cta reveal">
-          <h2>Технология уже работает.</h2>
-          <p>Четыре продукта — гипотезы поверх неё. Начните с того, что уже готово.</p>
           <a className="btn btn--primary" href={TOOL_URL}>
             Открыть узнаюдорогу.рф →
           </a>
+        </section>
+
+        {/* Слайд 5 — Рынок и цены */}
+        <section className="market-slide reveal" id="market">
+          <SlideTag n={5} title="Рынок и цены" seconds={35} />
+          <h2>Где деньги</h2>
+          <div className="compare__table">
+            <div className="compare__row compare__row--head">
+              <span>Направление</span>
+              <span>SOM</span>
+              <span>Цена</span>
+              <span>Маржа с единицы</span>
+            </div>
+            {PRICING_ROWS.map((row) => (
+              <div className="compare__row" key={row.name}>
+                <span>{row.name}</span>
+                <span>{row.som}</span>
+                <span>{row.price}</span>
+                <span>{row.margin}</span>
+              </div>
+            ))}
+          </div>
+          <p className="market-slide__note">
+            Апсейл — рамки: поднимают чек персональной карты в 2–4 раза.
+          </p>
+        </section>
+
+        {/* Слайд 6 — Как проверяем спрос */}
+        <section className="validation reveal" id="validation">
+          <SlideTag n={6} title="Как проверяем спрос" seconds={30} />
+          <h2>Деньгами, а не мнениями</h2>
+          <div className="validation__flow">
+            <span>CustDev по реальному поведению</span>
+            <span aria-hidden="true">→</span>
+            <span>Лендинг с 3–4 сценариями</span>
+            <span aria-hidden="true">→</span>
+            <span>Ручной MVP</span>
+            <span aria-hidden="true">→</span>
+            <span className="validation__kpi">KPI: оплаченный заказ</span>
+          </div>
+          <p className="validation__caption">
+            Не «купили бы вы?», а что человек уже покупал — и не клики или лайки, а
+            оплаченный заказ.
+          </p>
+          <div className="callout-box">
+            <p className="callout-box__label">Пример нового сегмента — ролевики (LARP)</p>
+            <p>
+              5 интервью, 3 из 5 самостоятельно назвали потребность в карте (для игры или
+              на память), 2 мастера готовы закладывать её в бюджет игры.
+            </p>
+            <p className="callout-box__verdict">
+              Вывод: перспективный под-сегмент внутри Event Maps и «Персональной карты» —
+              нужна выборка побольше.
+            </p>
+          </div>
+        </section>
+
+        {/* Слайд 7 — Результаты */}
+        <section className="results reveal" id="results">
+          <SlideTag n={7} title="Результаты" seconds={30} />
+          <h2>Что уже сделано</h2>
+          <ul className="results__list">
+            <li>Работающий прототип «Узнаю дорогу.рф»: интеграция с OpenStreetMap + towiki.ru.</li>
+            <li>Проведены первые CustDev по трём гипотезам, включая новый сегмент — ролевые игры.</li>
+            <li>Собрана методология проверки спроса, готовая к масштабированию на все 4 продукта.</li>
+          </ul>
+        </section>
+
+        {/* Слайд 8 — Каналы выхода на рынок */}
+        <section className="channels channels--top reveal" id="channels">
+          <SlideTag n={8} title="Каналы выхода на рынок" seconds={30} />
+          <h2>Как доберёмся до клиентов</h2>
+          <div className="channels__grid">
+            <div>
+              <p className="channels__label">B2C</p>
+              <p>Соцсети, контекстная реклама, блогеры, партнёрства (фотографы, свадебные организаторы, турагентства).</p>
+            </div>
+            <div>
+              <p className="channels__label">B2B</p>
+              <p>Прямые продажи локальному бизнесу и event-агентствам, ТЦ/БЦ/отели.</p>
+            </div>
+            <div>
+              <p className="channels__label">B2G/B2B</p>
+              <p>Школы и вузы, рекламные агентства — для «Узнаю дорогу.рф».</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Слайд 9 — Команда */}
+        <section className="team reveal" id="team">
+          <SlideTag n={9} title="Команда" />
+          <h2>Команда «Колобок»</h2>
+          <ul className="team__grid">
+            {TEAM.map((name) => (
+              <li key={name}>{name}</li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Слайд 10 — Запрос к инвесторам + спасибо */}
+        <section className="cta reveal" id="ask">
+          <SlideTag n={10} title="Запрос к инвесторам" />
+          <h2>Инвестиции — на проверку, а не на веру</h2>
+          <p>
+            Средства пойдут на CustDev по всем 4 направлениям, первые MVP-партии и
+            пилотные переговоры со школами и рекламными агентствами.
+          </p>
+          <a className="btn btn--primary" href={TOOL_URL}>
+            Открыть узнаюдорогу.рф →
+          </a>
+          <p className="cta__thanks">Спасибо за внимание! Готовы ответить на вопросы.</p>
         </section>
       </main>
 
