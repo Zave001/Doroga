@@ -24,7 +24,7 @@ export function Sidebar({ categories, itemsByCategory, loading, errors, onExpand
   return (
     <nav className="sidebar">
       <div className="sidebar__header">
-        <h1>Узнаю дорогу.рф</h1>
+        <h1>узнаюдорогу.рф</h1>
         <p>Улицы Томска из towiki.ru на карте OpenStreetMap</p>
         <input
           className="sidebar__search"
